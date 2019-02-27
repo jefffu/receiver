@@ -10,6 +10,7 @@ var PORT = parseInt(process.argv[2]) || 8999;
 var server = http.createServer(function (req, res) {
     
     function error(err) {
+        console.log(err);
         res.writeHead(500, {'Content-Type': 'text/plain'});
         res.end(err.toString()); //fail
     }
@@ -23,6 +24,11 @@ var server = http.createServer(function (req, res) {
                     if (err) {
                         error(err);
                     }
+                    fs.unlink(from, function (err) {
+                        if (err) {
+                            error("Delete temp file " + from + " " + err);
+                        }
+                    });
                     res.writeHead(200, {'Content-Type': 'text/plain'});
                     res.end('0'); //success
                 });
